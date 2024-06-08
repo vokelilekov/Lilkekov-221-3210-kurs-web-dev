@@ -119,11 +119,11 @@ def change_password():
     if password_form.validate_on_submit() and 'submit_password' in request.form:
         if current_user.check_password(password_form.current_password.data):
             current_user.update_password(password_form.new_password.data)
-            flash('Your password has been updated!', 'success')
+            flash('Ваш пароль был обновлен!', 'success')
             return redirect(url_for('main.profile'))
         else:
-            flash('Current password is incorrect', 'danger')
-    return render_template('change_password.html', title='Change Password', form=password_form)
+            flash('Текущий пароль неверен', 'danger')
+    return render_template('change_password.html', title='Смена пароля', form=password_form)
 
 @main.route("/login", methods=['GET', 'POST'])
 def login():

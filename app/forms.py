@@ -3,17 +3,17 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, Integ
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Optional
 from app.models import Card, Album, Role
 from flask_wtf.file import FileAllowed
-
+from .validators import password_validator
 
 class RegistrationForm(FlaskForm):
-    first_name = StringField('Имя', validators=[DataRequired(), Length(min=1, max=50)])
-    last_name = StringField('Фамилия', validators=[Length(max=50)])
-    middle_name = StringField('Отчество', validators=[Length(max=50)])
-    phone_number = StringField('Номер телефона', validators=[DataRequired(), Length(min=10, max=20)])
+    first_name = StringField('Имя', validators=[DataRequired()])
+    last_name = StringField('Фамилия', validators=[DataRequired()])
+    middle_name = StringField('Отчество')
+    phone_number = StringField('Телефон', validators=[DataRequired()])
     email = StringField('Почта', validators=[DataRequired(), Email()])
-    password = PasswordField('Пароль', validators=[DataRequired()])
-    confirm_password = PasswordField('Подтвердить пароль', validators=[DataRequired(), EqualTo('password')])
-    avatar = FileField('Загрузить аватар', validators=[FileAllowed(['jpg', 'png'])])
+    password = PasswordField('Пароль', validators=[DataRequired(), password_validator])
+    confirm_password = PasswordField('Подтверждение пароля', validators=[DataRequired(), EqualTo('password', message='Пароли должны совпадать.')])
+    avatar = FileField('Аватар')
     submit = SubmitField('Зарегистрироваться')
 
 class LoginForm(FlaskForm):
@@ -83,6 +83,6 @@ class UpdateProfileForm(FlaskForm):
 
 class ChangePasswordForm(FlaskForm):
     current_password = PasswordField('Текущий пароль', validators=[DataRequired()])
-    new_password = PasswordField('Новый пароль', validators=[DataRequired()])
-    confirm_new_password = PasswordField('Подтвердить новый пароль', validators=[DataRequired(), EqualTo('new_password')])
-    submit = SubmitField('Сохранить изменения')
+    new_password = PasswordField('Новый пароль', validators=[DataRequired(), password_validator])
+    confirm_new_password = PasswordField('Подтверждение нового пароля', validators=[DataRequired(), EqualTo('new_password', message='Пароли должны совпадать.')])
+    submit_password = SubmitField('Сменить пароль')
